@@ -50,6 +50,52 @@ def updateBoard():
         return jsonify({ "error" : str(e)}), 400
     
 # Game loop
+@app.post('/engine-move')
+def playEngineMove():
+    data = request.get_json()
+    
+    elo = data['elo']
+    engineStrength = data['time']
+    time = float(engineStrength)
+    try:
+        engine_white.configure({
+            "UCI_LimitStrength": True,
+            "UCI_Elo": elo  # You can set 1350, 1600, etc. too
+        })
+        result = engine_white.play(board, chess.engine.Limit(time=time))
+        board.push(result.move)
+        if board.is_game_over():
+            return jsonify({
+                "fen": board.fen(),
+                "game_over": True,
+                "result": board.result()
+            })
+        return jsonify({"fen":board.fen(), "game_over": False})
+    except Exception as e:
+        return jsonify({ "error" : str(e)}), 400
+
+    
+@app.get('/best-moves')
+def getBestMoves():
+    info = engine.analyse(board, chess.engine.Limit(time=0.1), multipv=10)
+    result = []
+    for t in info:
+        move = t['pv'][0] if 'pv' in t else None
+        score = t["score"].white()
+        realScore = 0
+        if score.is_mate() ==False:
+            realScore = score.score()
+        else: 
+            realScore = score.mate()
+        result.append({"move": move.uci() if move else None, 
+                       "score": realScore,
+                       "mate": score.is_mate()})
+    try:
+        return jsonify({"best moves": result})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+            
+            
 while not board.is_game_over():
     info = engine.analyse(board, chess.engine.Limit(time=0.1), multipv=10)
     for i, info in enumerate(info):
