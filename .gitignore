@@ -1,3 +1,38 @@
 venv
 __pycache__
 chess-games.db
+
+# Node modules
+node_modules/
+
+# Build output
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local env files
+.env
+.env.*.local
+
+# IDE/Editor settings
+.vscode/
+.idea/
+.DS_Store
+
+# Optional: OS-specific files
+Thumbs.db
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Output from package managers
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Optional: MacBook-specific system files
+.DS_Store
