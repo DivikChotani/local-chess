@@ -8,19 +8,33 @@ function App() {
   const [boardSize, setBoardSize] = useState(
     Math.min(window.innerWidth, window.innerHeight)
   );
+  const [gameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
       setBoardSize(Math.min(window.innerWidth, window.innerHeight));
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>
-      <Chessboard id="ResponsiveBoard" boardWidth={boardSize * 4/5} />
+    <div 
+      className='container'
+      >
+      { gameStarted ? (
+      <Chessboard id="ResponsiveBoard" boardWidth={boardSize * 4/5} /> 
+      ):
+      (
+        <button  
+          type="button" 
+          onClick={() => setGameStarted(true)}
+          className='start-button'
+          >
+          Start Game
+        </button>
+      )}
     </div>
   );
 }

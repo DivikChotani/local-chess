@@ -3,6 +3,11 @@ import chess
 import chess.engine
 import chess.svg
 import sqlite3
+from flask_cors import CORS
+import signal
+import sys
+
+
 
 engine = chess.engine.SimpleEngine.popen_uci("/opt/homebrew/bin/stockfish")
 
@@ -11,17 +16,17 @@ conn = sqlite3.connect("chess-games.db")
 cursor = conn.cursor()
 
 # Start two Stockfish instances
-# engine_white = chess.engine.SimpleEngine.popen_uci("/opt/homebrew/bin/stockfish")
-# engine_black = chess.engine.SimpleEngine.popen_uci("/opt/homebrew/bin/stockfish")
-# engine_white.configure({
-#     "UCI_LimitStrength": True,
-#     "UCI_Elo": 2500  # You can set 1350, 1600, etc. too
-# })
-# # Set weaker ELO for Black
-# engine_black.configure({
-#     "UCI_LimitStrength": True,
-#     "UCI_Elo": 1320  # You can set 1350, 1600, etc. too
-# })
+engine_white = chess.engine.SimpleEngine.popen_uci("/opt/homebrew/bin/stockfish")
+engine_black = chess.engine.SimpleEngine.popen_uci("/opt/homebrew/bin/stockfish")
+engine_white.configure({
+    "UCI_LimitStrength": True,
+    "UCI_Elo": 2500  # You can set 1350, 1600, etc. too
+})
+# Set weaker ELO for Black
+engine_black.configure({
+    "UCI_LimitStrength": True,
+    "UCI_Elo": 1320  # You can set 1350, 1600, etc. too
+})
 
 board = chess.Board()
 # print("Starting position:")
@@ -29,6 +34,9 @@ board = chess.Board()
 # print(board.fen())
 
 app = Flask(__name__)
+CORS(app) 
+
+
 @app.post('/initialize-board')
 def initializeBorad():
     return jsonify({"fen": board.fen()})
@@ -99,32 +107,22 @@ def getBestMoves():
         return jsonify({"best moves": result})
     except Exception as e:
         return jsonify({"error": str(e)}), 400
-            
-            
-# while not board.is_game_over():
-#     info = engine.analyse(board, chess.engine.Limit(time=0.1), multipv=10)
-#     for i, info in enumerate(info):
-#             move = info["pv"][0] if "pv" in info else None
-#             score = info["score"].white()
-#             print(f"#{i+1} Best move: {move}, Score: {score}")
-#     if board.turn == chess.WHITE:
-#         result = engine_white.play(board, chess.engine.Limit(time=0.1))
-#         print(result)
+    
+    
+def graceful_shutdown(signal_received, frame):
+    print('Ctrl-C detected! Cleaning up...')
+    try:
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print('Error closing DB:', e)
+    try:
+        engine.quit()
+        engine_white.quit()
+        engine_black.quit()
+    except Exception as e:
+        print('Error quitting engines:', e)
+    sys.exit(0)
 
-#         print("White (Strong) plays:", result.move)
-#     else:
-#         result = engine_black.play(board, chess.engine.Limit(time=0.1))
-#         print("Black (Weak) plays:", result.move)
-#     board.push(result.move)
-#     print(board)
-
-# # Show result
-# print("Game over:", board.result())
-
-# Clean up
-conn.commit()
-conn.close()
-
-# engine_white.quit()
-# engine_black.quit()
-engine.quit()
+# Attach signal handler
+signal.signal(signal.SIGINT, graceful_shutdown)
