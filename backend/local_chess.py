@@ -37,11 +37,12 @@ app = Flask(__name__)
 CORS(app) 
 
 
-@app.post('/initialize-board')
+@app.route('/initialize-board', methods=['GET'])
 def initializeBorad():
+    print("HERE")
     return jsonify({"fen": board.fen()})
 
-@app.post('/post-move')
+@app.route('/post-move', methods=['POST'])
 def updateBoard():
     data = request.get_json()
     
@@ -63,7 +64,7 @@ def updateBoard():
         return jsonify({ "error" : str(e)}), 400
     
 # Game loop
-@app.post('/engine-move')
+@app.route('/engine-move', methods=['POST'])
 def playEngineMove():
     data = request.get_json()
     
@@ -88,7 +89,7 @@ def playEngineMove():
         return jsonify({ "error" : str(e)}), 400
 
     
-@app.get('/best-moves')
+@app.route('/best-move', methods=['GET'])
 def getBestMoves():
     info = engine.analyse(board, chess.engine.Limit(time=0.1), multipv=10)
     result = []
@@ -126,3 +127,5 @@ def graceful_shutdown(signal_received, frame):
 
 # Attach signal handler
 signal.signal(signal.SIGINT, graceful_shutdown)
+if __name__ == "__main__":
+    app.run(port=5000)
