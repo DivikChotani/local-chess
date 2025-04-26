@@ -39,14 +39,17 @@ CORS(app)
 
 @app.route('/initialize-board', methods=['GET'])
 def initializeBorad():
-    print("HERE")
+    board = chess.Board()
+    print(board)
     return jsonify({"fen": board.fen()})
 
 @app.route('/post-move', methods=['POST'])
 def updateBoard():
+    print(board)
     data = request.get_json()
     
     newMove = data['new-move']
+    print(newMove)
     
     try:
         move = chess.Move.from_uci(newMove)
