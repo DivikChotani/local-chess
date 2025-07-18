@@ -2,7 +2,7 @@
 
 A modern, feature-rich chess application built with React and Python Flask, featuring Stockfish engine integration, position analysis, and a beautiful UI.
 
-## 🎯 Features
+## Features
 
 - **Play against Stockfish**: Configure engine strength (ELO 800-3000) and think time
 - **Dual Input Methods**: Click-to-move and drag-and-drop piece movement
@@ -13,21 +13,20 @@ A modern, feature-rich chess application built with React and Python Flask, feat
 - **Responsive Design**: Works on desktop and mobile devices
 - **Beautiful UI**: Modern dark theme with smooth animations
 
-## 🏗️ Architecture
+## Architecture
 
 - **Frontend**: React + TypeScript + Vite
 - **Backend**: Python Flask + Stockfish engine
 - **Chess Logic**: python-chess library
 - **UI Components**: react-chessboard
 
-## 📋 Prerequisites
+## Prerequisites
 
 - **Node.js** (v16 or higher)
 - **Python** (v3.8 or higher)
 - **Stockfish** chess engine
 - **npm** or **yarn** package manager
 
-## 🚀 Quick Start
 
 ### 1. Clone the Repository
 ```bash
@@ -65,14 +64,6 @@ npm install
 brew install stockfish
 ```
 
-#### Ubuntu/Debian
-```bash
-sudo apt-get install stockfish
-```
-
-#### Windows
-Download from [Stockfish official website](https://stockfishchess.org/download/) and add to PATH.
-
 ### 4. Run the Application
 
 #### Option 1: Use the Shell Script (Recommended)
@@ -99,7 +90,7 @@ npm run dev
 ### 5. Access the Application
 Open your browser and navigate to: `http://localhost:5173`
 
-## 🎮 How to Play
+## How to Play
 
 1. **Configure Your Opponent**:
    - Set Engine Strength (ELO): 800-3000 (higher = stronger)
@@ -111,7 +102,6 @@ Open your browser and navigate to: `http://localhost:5173`
 
 3. **Make Moves**:
    - **Click-to-move**: Click a piece, then click a destination square
-   - **Drag-and-drop**: Drag pieces to their destination
 
 4. **Use Features**:
    - **Analyze Position**: Get centipawn evaluation for current position
@@ -119,7 +109,7 @@ Open your browser and navigate to: `http://localhost:5173`
    - **Move History**: View all moves in the current game
    - **Game History**: Browse previous games
 
-## 🛠️ Development
+## Development
 
 ### Project Structure
 ```
@@ -154,7 +144,7 @@ local-chess/
 - **GameHistoryPanel**: Game history browser
 - **Chessboard**: Interactive chess board
 
-## 🔧 Configuration
+## Configuration
 
 ### Engine Settings
 - **ELO Range**: 800-3000 (800 = Beginner, 2800 = Master)
@@ -166,39 +156,9 @@ If Stockfish is not in the default location, update the path in `backend/local_c
 engine = chess.engine.SimpleEngine.popen_uci("/path/to/stockfish")
 ```
 
-## 🐛 Troubleshooting
 
-### Common Issues
 
-1. **Stockfish not found**:
-   - Ensure Stockfish is installed and in PATH
-   - Update the path in `backend/local_chess.py`
-
-2. **Port already in use**:
-   - Backend runs on port 5000
-   - Frontend runs on port 5173
-   - Kill processes using these ports
-
-3. **CORS errors**:
-   - Backend has CORS enabled
-   - Ensure frontend is running on `http://localhost:5173`
-
-4. **Python dependencies**:
-   - Ensure virtual environment is activated
-   - Run `pip install -r requirements.txt`
-
-### Debug Mode
-```bash
-# Backend with debug logging
-cd backend
-python local_chess.py --debug
-
-# Frontend with development tools
-cd frontend
-npm run dev -- --debug
-```
-
-## 📦 Dependencies
+## Dependencies
 
 ### Backend
 - `flask`: Web framework
@@ -213,32 +173,10 @@ npm run dev -- --debug
 - `axios`: HTTP client
 - `vite`: Build tool
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## 📄 License
-
-This project is open source and available under the MIT License.
-
-## 🙏 Acknowledgments
 
 - [Stockfish](https://stockfishchess.org/) - Chess engine
 - [python-chess](https://python-chess.readthedocs.io/) - Python chess library
 - [react-chessboard](https://github.com/Clariity/react-chessboard) - React chess component
 - [chess.js](https://github.com/jhlywa/chess.js) - JavaScript chess library
 
-## 📞 Support
-
-If you encounter any issues or have questions:
-1. Check the troubleshooting section
-2. Search existing issues
-3. Create a new issue with detailed information
-
----
-
-**Happy Chess Playing! ♔♚** 
